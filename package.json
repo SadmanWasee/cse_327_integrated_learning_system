@@ -1,0 +1,24 @@
+{
+  "name": "cse_327_integrated_learning_system",
+  "version": "1.0.0",
+  "description": "This repository is for our CSE327 - Software Engineering Project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SadmanWasee/cse_327_integrated_learning_system.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SadmanWasee/cse_327_integrated_learning_system/issues"
+  },
+  "homepage": "https://github.com/SadmanWasee/cse_327_integrated_learning_system#readme",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "express": "^4.18.2",
+    "mongoose": "^7.1.0"
+  }
+}
