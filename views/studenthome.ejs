@@ -10,7 +10,7 @@
           box-sizing: border-box;
           display: flex;
           flex-wrap: wrap;
-          background-color: cadetblue;
+          /* background-color: cadetblue; */
           padding: 20px 0;
           justify-content: center;
           align-items: center;
@@ -55,10 +55,10 @@
           box-shadow: 4px 12px 5px white;
         }
   
-        #Logout {
+        #Logout,#createclass {
           padding: 10px 20px;
         }
-  
+
         .reverse-block {
           display: flex;
           flex-direction: row-reverse;
@@ -70,21 +70,18 @@
         <h1>Integrated learning system</h1>
   
         <div class="reverse-block">
-          <div>
-            <input id="Logout" type="submit" value="Logout" />
+            <div>
+              <a class="logout" href="/logout" role="button"><input id="Logout" type="submit" value="logout"></a>
+              <input id="createclass" type="submit" value="+">
+            </div>
+            </div>
           </div>
         </div>
-      </div>
-  
+    
       <hr />
   
       <div class="card-container">
         <div class="card">
-          <img
-            class="image-style"
-            src="https://journalarjom.com/public/journals/51/homepageImage_en_US.jpg"
-            alt=""
-          />
   
           <div class="card-body">
             <div class="card-title">Mathmatics</div>
@@ -96,14 +93,9 @@
         </div>
   
         <div class="card">
-          <img
-            class="image-style"
-            src="https://img.freepik.com/free-photo/education-day-arrangement-table-with-copy-space_23-2148721266.jpg"
-            alt=""
-          />
   
           <div class="card-body">
-            <div class="card-title">Software engeeniering</div>
+            <div class="card-title">CSE327</div>
   
             <div class="card-des">
               <h3>Siam Bin haque</h3>

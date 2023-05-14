@@ -44,10 +44,18 @@ const userSchema = new mongoose.Schema({
     password: String,
 });
 
+const classSchema = new mongoose.Schema({
+    _id:Number,
+    teacher:String,
+    classname:String,
+    subject:String
+});
+
 userSchema.plugin(passportLocalMongoose);
 userSchema.plugin(findOrCreate);
 
 const User = new mongoose.model("User", userSchema);
+const Class = new mongoose.model("Class", classSchema);
 
 passport.serializeUser(function(user, cb) {
     process.nextTick(function() {
@@ -70,6 +78,7 @@ passport.serializeUser(function(user, cb) {
     User.findOrCreate({ googleId: profile.id }, function (err, user) {
       return cb(err, user);
     });
+    
   }
 ));
 
@@ -85,25 +94,83 @@ app.get("/login", (req, res)=>{
 
 
 app.get("/home", (req, res)=>{
+  if(req.isAuthenticated()){
     res.render("home");
-})
+} 
+else{
+    res.redirect("/login");
+}
+
+});
 
 app.get("/register", (req, res)=>{
     res.render("register");
 })
 
 app.get("/studenthome", (req, res)=>{
-  res.render("studenthome");
-})
+  if(req.isAuthenticated()){
+    res.render("studenthome");
+  } 
+  else{
+      res.redirect("/login");
+  }
+
+});
 
 app.get("/teacherhome", (req, res)=>{
-  res.render("teacherhome");
+
+  if(req.isAuthenticated()){
+    Class.find({teacher:req.user.id}).then(function(classes){
+      console.log(classes);
+      res.render("teacherhome", { classes: classes});
+    })
+  } 
+  else{
+      res.redirect("/login");
+  }
+
+
 })
 
+app.post("/studenthome", (req,res)=>{
+  res.redirect("studenthome");
+})
 
+app.post("/teacherhome", (req,res)=>{
+  
+  res.redirect("teacherhome");
+})
+
+app.get("/createclass",(req,res)=>{
+  if(req.isAuthenticated()){
+    res.render("createclass");
+  } 
+  else{
+      res.redirect("/login");
+  }
+
+})
+
+app.post("/createclass",(req,res)=>{
+
+  let id = Math.floor((Math.random() * 100000) + 1);
+  
+  const newClass = new Class({
+
+    _id:id,
+    teacher:req.user.id,
+    classname:req.body.classname,
+    subject:req.body.subject
+
+  });
+
+  newClass.save();
+
+  res.redirect("teacherhome");
+})
 
 app.get('/auth/google',
-  passport.authenticate('google', { scope: ['profile'] }));
+  passport.authenticate('google', { scope: ['profile', 'email'] }));
 
 app.get('/auth/google/home', 
   passport.authenticate('google', { failureRedirect: '/login' }),
@@ -112,43 +179,52 @@ app.get('/auth/google/home',
     res.redirect('/home');
   });
 
-app.post("/register", (req,res)=>{
+// app.post("/register", (req,res)=>{
 
-    User.register({username: req.body.username}, req.body.password, function(err, user){
-        if(err){
-            console.log(err);
-            res.redirect("/register");
-        }else{
-            passport.authenticate("local")(req,res, function(){
-                res.redirect("/home");
-            })
-        }
-    })
+//     User.register({username: req.body.username}, req.body.password, function(err, user){
+//         if(err){
+//             console.log(err);
+//             res.redirect("/register");
+//         }else{
+//             passport.authenticate("local")(req,res, function(){
+//                 res.redirect("/home");
+//             })
+//         }
+//     })
 
 
-});
+// });
 
-app.post("/login", (req,res)=>{
+// app.post("/login", (req,res)=>{
      
-    const user = new User({
-        username: req.body.username,
-        password: req.body.password
+//     const user = new User({
+//         username: req.body.username,
+//         password: req.body.password
+//     });
+
+//     req.login(user, function(err){
+//         if(err){
+//             console.log(err);
+//         }else{
+//             passport.authenticate("local")(req, res, function(){
+//                 res.redirect("/home"); 
+//             });
+//         }
+//     });
+
+// });
+
+
+app.get("/logout", (req,res)=>{
+    
+
+  req.logout(function(err) {
+      if (err) { console.log(err); }
+      res.redirect('/');
     });
 
-    req.login(user, function(err){
-        if(err){
-            console.log(err);
-        }else{
-            passport.authenticate("local")(req, res, function(){
-                res.redirect("/home"); 
-            });
-        }
-    });
 
-});
-
-
-
+})
 
 
 

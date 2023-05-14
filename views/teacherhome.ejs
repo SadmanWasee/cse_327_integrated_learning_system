@@ -10,7 +10,7 @@
           box-sizing: border-box;
           display: flex;
           flex-wrap: wrap;
-          background-color: cadetblue;
+          background-color: white;
           padding: 20px 0;
           justify-content: center;
           align-items: center;
@@ -55,7 +55,7 @@
           box-shadow: 4px 12px 5px white;
         }
   
-        #Logout {
+        #Logout,#createclass {
           padding: 10px 20px;
         }
   
@@ -71,7 +71,10 @@
   
         <div class="reverse-block">
           <div>
-            <input id="Logout" type="submit" value="Logout" />
+            <a class="logout" href="/logout" role="button"><input id="Logout" type="submit" value="logout"></a>
+            <a class="createclass" href="/createclass" role="button"><input id="createclass" type="submit" value="+"></a>
+            <!-- <input id="createclass" type="submit" value="+"> -->
+          </div>
           </div>
         </div>
       </div>
@@ -80,35 +83,13 @@
   
       <div class="card-container">
         <div class="card">
-          <img
-            class="image-style"
-            src="https://journalarjom.com/public/journals/51/homepageImage_en_US.jpg"
-            alt=""
-          />
   
-          <div class="card-body">
-            <div class="card-title">Mathmatics</div>
-  
-            <div class="card-des">
-              <h3>Sadman wasee</h3>
+        <div class="card-body">
+            <%for(let i=0; i<classes.length; i++){%>
+            <div class="card-title"><%= classes[i].classname %></div>
+            <div class="card-des"><%= classes[i].subject %></div>
             </div>
-          </div>
-        </div>
-  
-        <div class="card">
-          <img
-            class="image-style"
-            src="https://img.freepik.com/free-photo/education-day-arrangement-table-with-copy-space_23-2148721266.jpg"
-            alt=""
-          />
-  
-          <div class="card-body">
-            <div class="card-title">Software engeeniering</div>
-  
-            <div class="card-des">
-              <h3>Siam Bin haque</h3>
-            </div>
-          </div>
+            <%}%>
         </div>
       </div>
 </body>
