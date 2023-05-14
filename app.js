@@ -92,6 +92,15 @@ app.get("/register", (req, res)=>{
     res.render("register");
 })
 
+app.get("/studenthome", (req, res)=>{
+  res.render("studenthome");
+})
+
+app.get("/teacherhome", (req, res)=>{
+  res.render("teacherhome");
+})
+
+
 
 app.get('/auth/google',
   passport.authenticate('google', { scope: ['profile'] }));
@@ -137,6 +146,8 @@ app.post("/login", (req,res)=>{
     });
 
 });
+
+
 
 
 
