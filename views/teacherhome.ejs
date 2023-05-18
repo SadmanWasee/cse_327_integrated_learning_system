@@ -68,6 +68,7 @@
 <body>
     <div>
         <h1>Integrated learning system</h1>
+        
   
         <div class="reverse-block">
           <div>
@@ -80,17 +81,21 @@
       </div>
   
       <hr />
-  
+      
       <div class="card-container">
+
+        <%for(let i=0; i<classes.length; i++){%>
         <div class="card">
-  
+          
         <div class="card-body">
-            <%for(let i=0; i<classes.length; i++){%>
+            
             <div class="card-title"><%= classes[i].classname %></div>
             <div class="card-des"><%= classes[i].subject %></div>
             </div>
-            <%}%>
+            
         </div>
+        <%}%>
       </div>
+      
 </body>
 </html>

@@ -55,7 +55,7 @@
           box-shadow: 4px 12px 5px white;
         }
   
-        #Logout,#createclass {
+        #Logout,#joinclass {
           padding: 10px 20px;
         }
 
@@ -68,11 +68,13 @@
 <body>
     <div>
         <h1>Integrated learning system</h1>
+
+        <h2>Welcome to your student profile</h2>
   
         <div class="reverse-block">
             <div>
               <a class="logout" href="/logout" role="button"><input id="Logout" type="submit" value="logout"></a>
-              <input id="createclass" type="submit" value="+">
+              <a class="joinclass" href="/joinclass" role="button"><input id="joinclass" type="submit" value="+"></a>
             </div>
             </div>
           </div>
@@ -84,23 +86,13 @@
         <div class="card">
   
           <div class="card-body">
-            <div class="card-title">Mathmatics</div>
-  
-            <div class="card-des">
-              <h3>Sadman wasee</h3>
+            <%for(let i=0; i<classes.length; i++){%>
+            <div class="card-title"><%= classes[i].classname %></div>
+            <div class="card-des"><%= classes[i].subject %></div>
             </div>
+            <%}%>
           </div>
-        </div>
-  
-        <div class="card">
-  
-          <div class="card-body">
-            <div class="card-title">CSE327</div>
-  
-            <div class="card-des">
-              <h3>Siam Bin haque</h3>
-            </div>
-          </div>
+
         </div>
       </div>
 </body>

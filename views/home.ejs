@@ -1,20 +1,80 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Integrated Learning System</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+.button {
+  padding: 15px 25px;
+  font-size: 24px;
+  text-align: center;
+  cursor: pointer;
+  outline: none;
+  color: #fff;
+  background-color: #04AA6D;
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 9px #999;
+}
+
+.button:hover {background-color: #3e8e41}
+
+.button:active {
+  background-color: #3e8e41;
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
+}
+
+body {
+  background-image: url("q.png");
+  overflow-x: hidden;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center;
+  display: block;
+}
+
+.static {
+  position: relative;
+  left: 678px;
+  top: 159px;
+}
+
+.static2 {
+  position: relative;
+  left: 560px;
+  top: 165px;
+}
+
+.static3 {
+  position: relative;
+  left: 560px;
+  top: 185px;
+}
+
+.static4 {
+  position: relative;
+  top: 55px;
+  right: 270px;
+}
+</style>
 </head>
 <body>
-    <h1>Welcome</h1>
-    <div class="container">
-        <form action="teacherhome" method="get">
-            <input type="submit" value="Continue with your teacher profile">
-        </form>
-        <form action="studenthome" method="get">
-            <input type="submit" value="Continue with your student profile">
-        </form>
+  <div class="static4">
+    <div class="static">
+      <h1>WELCOME</h1>
     </div>
+    
+    <form action="/teacherhome" method="POST">
+      <div class="static2">
+        <input class="button" type="submit" value="Continue With Your Teacher Profile">
+      </div>
+    </form>
+    
+    <form action="/studenthome" method="POST">
+      <div class="static3">
+        <input class="button" type="submit" value="Continue With Your Student Profile">
+      </div>
+    </form>
+  </div>
 </body>
 </html>

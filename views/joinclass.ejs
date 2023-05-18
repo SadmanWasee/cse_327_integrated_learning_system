@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ingtegrated Learning System</title>
+    <style>
+        body{
+            margin: 0;
+            padding: 0;
+            align-content: center;
+            text-align: center;
+        }
+        .container{
+            padding-top: 100px;
+            border: 2px black;
+        }
+        .form-group{
+            margin: 5px;
+        }
+        h1{
+            margin: 0;
+            padding: 3px;
+            color: white;
+            background-color: #1F2937;
+        }
+    </style>
+</head>
+<body>
+    <h1>Integrated Learning System</h1>
+    <div class="container">
+        <h2>Join class</h2>
+        <form action="/joinclass" method="POST">
+            <div class="form-group">
+              <label for="code">Enter class code:</label>
+              <input type="text" class="form-control" name="code" required>
+            </div>
+            <button type="submit" class="btn btn-dark">Join</button>
+          </form>
+    </div>
+
+</body>
+</html>

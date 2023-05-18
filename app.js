@@ -39,9 +39,7 @@ mongoose.connect('mongodb://127.0.0.1:27017/ims1DB');
 
 const userSchema = new mongoose.Schema({
     username: String,
-    googleId: String,
-    email: String,
-    password: String,
+    googleId: String
 });
 
 const classSchema = new mongoose.Schema({
@@ -51,11 +49,20 @@ const classSchema = new mongoose.Schema({
     subject:String
 });
 
+const joinclassSchema = new mongoose.Schema({
+  studentid: String,
+  classid: Number,
+  teacher:String,
+  classname:String,
+  subject:String
+})
+
 userSchema.plugin(passportLocalMongoose);
 userSchema.plugin(findOrCreate);
 
 const User = new mongoose.model("User", userSchema);
 const Class = new mongoose.model("Class", classSchema);
+const JoinClass = new mongoose.model("JoinClass", joinclassSchema);
 
 passport.serializeUser(function(user, cb) {
     process.nextTick(function() {
@@ -109,7 +116,12 @@ app.get("/register", (req, res)=>{
 
 app.get("/studenthome", (req, res)=>{
   if(req.isAuthenticated()){
-    res.render("studenthome");
+
+    JoinClass.find({studentid:req.user.id}).then(function(classes){
+      console.log(classes);
+      res.render("studenthome", {classes:classes})
+    })
+    // res.render("studenthome");
   } 
   else{
       res.redirect("/login");
@@ -130,11 +142,11 @@ app.get("/teacherhome", (req, res)=>{
   }
 
 
-})
+});
 
 app.post("/studenthome", (req,res)=>{
   res.redirect("studenthome");
-})
+});
 
 app.post("/teacherhome", (req,res)=>{
   
@@ -149,7 +161,7 @@ app.get("/createclass",(req,res)=>{
       res.redirect("/login");
   }
 
-})
+});
 
 app.post("/createclass",(req,res)=>{
 
@@ -168,6 +180,39 @@ app.post("/createclass",(req,res)=>{
 
   res.redirect("teacherhome");
 })
+
+app.get("/joinclass",(req,res)=>{
+  if(req.isAuthenticated()){
+    res.render("joinclass");
+  } 
+  else{
+      res.redirect("/login");
+  }
+
+});
+
+app.post("/joinclass",(req,res)=>{
+
+  Class.findById(req.body.codes).then(function(classes){
+
+    const newjoinclasinfo = new JoinClass({
+      studentid: req.user.id,
+      classid: req.body.code,
+      teacher:classes.teacher,
+      classname:classes.classname,
+      subject:classes.subject
+    })
+    newjoinclasinfo.save();
+    res.redirect("studenthome");
+
+
+  })
+  
+
+})
+
+
+
 
 app.get('/auth/google',
   passport.authenticate('google', { scope: ['profile', 'email'] }));
