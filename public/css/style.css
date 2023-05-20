@@ -15,3 +15,38 @@ body {
     background-color: #000;
   }
   
+  body {
+    background-color: #f8f9fa;
+  }
+
+  .jumbotron {
+    background-color: #343a40;
+    color: #fff;
+    text-align: center;
+    padding: 100px 0;
+  }
+
+  .jumbotron h1 {
+    font-size: 48px;
+  }
+
+  .jumbotron p {
+    font-size: 24px;
+    margin-bottom: 30px;
+  }
+
+  .btn-lg {
+    font-size: 20px;
+    padding: 10px 30px;
+    margin-right: 10px;
+  }
+
+  .btn-light {
+    color: #343a40;
+    background-color: #fff;
+  }
+
+  .btn-dark {
+    color: #fff;
+    background-color: #343a40;
+  }

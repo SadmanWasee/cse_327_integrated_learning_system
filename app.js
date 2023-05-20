@@ -110,6 +110,8 @@ else{
 
 });
 
+
+
 app.get("/register", (req, res)=>{
     res.render("register");
 })
@@ -133,7 +135,6 @@ app.get("/teacherhome", (req, res)=>{
 
   if(req.isAuthenticated()){
     Class.find({teacher:req.user.id}).then(function(classes){
-      console.log(classes);
       res.render("teacherhome", { classes: classes});
     })
   } 
@@ -149,8 +150,8 @@ app.post("/studenthome", (req,res)=>{
 });
 
 app.post("/teacherhome", (req,res)=>{
-  
-  res.redirect("teacherhome");
+   
+   res.redirect("teacherhome");
 })
 
 app.get("/createclass",(req,res)=>{
@@ -193,7 +194,7 @@ app.get("/joinclass",(req,res)=>{
 
 app.post("/joinclass",(req,res)=>{
 
-  Class.findById(req.body.codes).then(function(classes){
+  Class.findById(req.body.code).then(function(classes){
 
     const newjoinclasinfo = new JoinClass({
       studentid: req.user.id,
@@ -211,7 +212,27 @@ app.post("/joinclass",(req,res)=>{
 
 })
 
+var coursehomeid;
+app.get("/coursehome", (req,res)=>{
+  
+  //res.render("coursehome", {classname:classname});
+  Class.findById(coursehomeid).then(function(classes)
+  {
+    res.render("coursehome", {classname:classes.classname});
+  });
+  
+  
+})
 
+app.post("/coursehome", (req,res)=>{
+  // console.log(req.body.classid);
+  // let classid = req.body.classid;
+  // Class.findById(classid).then(function(classes)
+  // {
+    coursehomeid = req.body.classid;
+    res.redirect("/coursehome");
+ 
+});
 
 
 app.get('/auth/google',
@@ -224,6 +245,7 @@ app.get('/auth/google/home',
     res.redirect('/home');
   });
 
+  
 // app.post("/register", (req,res)=>{
 
 //     User.register({username: req.body.username}, req.body.password, function(err, user){
@@ -260,17 +282,12 @@ app.get('/auth/google/home',
 // });
 
 
-app.get("/logout", (req,res)=>{
-    
-
+app.get('/logout', function(req, res, next){
   req.logout(function(err) {
-      if (err) { console.log(err); }
-      res.redirect('/');
-    });
-
-
-})
-
+    if (err) { return next(err); }
+    res.redirect('/');
+  });
+});
 
 
 app.listen(3000, function(){

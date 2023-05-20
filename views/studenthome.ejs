@@ -4,96 +4,138 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Integrated Learning system</title>
+    <title>Integrated Learning System</title>
     <style>
+        /* General Styles */
+        body {
+          font-family: Arial, sans-serif;
+          margin: 0;
+          padding: 0;
+          background-color: #f2f2f2;
+        }
+  
+        h1 {
+          text-align: center;
+          padding: 20px 0;
+          background-color: #333;
+          color: white;
+          margin: 0;
+        }
+  
+        /* Navigation Styles */
+        nav {
+          background-color: #333;
+          color: white;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 10px;
+        }
+  
+        .logo {
+          font-size: 20px;
+          margin-left: 20px;
+        }
+  
+        .navigation {
+          list-style-type: none;
+          margin: 0;
+          padding: 0;
+          display: flex;
+          align-items: center;
+        }
+  
+        .navigation li {
+          margin-left: 10px;
+        }
+  
+        .navigation li a {
+          color: white;
+          text-decoration: none;
+        }
+  
+        .reverse-block {
+          display: flex;
+          align-items: center;
+        }
+  
+        .reverse-block a {
+          text-decoration: none;
+          color: white;
+          margin-left: 10px;
+        }
+  
+        #logout {
+          padding: 10px 20px;
+        }
+  
+        /* Card Styles */
         .card-container {
           box-sizing: border-box;
           display: flex;
           flex-wrap: wrap;
-          /* background-color: cadetblue; */
-          padding: 20px 0;
           justify-content: center;
           align-items: center;
+          padding: 20px;
         }
   
         .card {
-          /* height: 100px; */
           width: 300px;
           margin: 10px;
           box-sizing: border-box;
           box-shadow: 1px 2px 4px black;
-        }
-  
-        .image-style {
-          width: 100%;
+          background-color: white;
         }
   
         .card-body {
           height: 200px;
           padding: 5px;
           background-color: rgb(64, 114, 164);
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
         }
   
-        .card-body .card-title {
+        .card-title {
           font-size: 2rem;
           text-align: center;
           color: white;
+          margin-bottom: 10px;
         }
   
-        .card-title:hover {
-          text-decoration: underline;
-          cursor: pointer;
-        }
-  
-        .card-body .card-des {
-          text-align: justify;
+        .card-des {
+          text-align: center;
           line-height: 1.5;
           color: white;
         }
-  
-        .card-hover {
-          box-shadow: 4px 12px 5px white;
-        }
-  
-        #Logout,#joinclass {
-          padding: 10px 20px;
-        }
-
-        .reverse-block {
-          display: flex;
-          flex-direction: row-reverse;
-        }
-      </style>
+    </style>
 </head>
 <body>
     <div>
-        <h1>Integrated learning system</h1>
+        <!-- <h1>Integrated Learning System</h1> -->
+        
+        <nav>
+          <div class="logo">Integrated Learning System</div>
+          <ul class="navigation">
+            <li class="reverse-block">
+              <a href="/createclass" role="button"><input type="submit" value="+"></a>
+              <a href="/logout" role="button" id="logout">Logout</a>
+              
+            </li>
+          </ul>
+        </nav>
+    </div>
 
-        <h2>Welcome to your student profile</h2>
-  
-        <div class="reverse-block">
-            <div>
-              <a class="logout" href="/logout" role="button"><input id="Logout" type="submit" value="logout"></a>
-              <a class="joinclass" href="/joinclass" role="button"><input id="joinclass" type="submit" value="+"></a>
-            </div>
-            </div>
-          </div>
-        </div>
-    
-      <hr />
-  
-      <div class="card-container">
+    <div class="card-container">
+        <% for(let i=0; i<classes.length; i++){ %>
         <div class="card">
-  
-          <div class="card-body">
-            <%for(let i=0; i<classes.length; i++){%>
-            <div class="card-title"><%= classes[i].classname %></div>
-            <div class="card-des"><%= classes[i].subject %></div>
+            <div class="card-body">
+                <div class="card-title"><%= classes[i].classname %></div>
+                <div class="card-des"><%= classes[i].subject %></div>
             </div>
-            <%}%>
-          </div>
-
         </div>
-      </div>
+        <% } %>
+    </div>
 </body>
 </html>
