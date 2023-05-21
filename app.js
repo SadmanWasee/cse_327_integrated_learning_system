@@ -120,7 +120,7 @@ app.get("/studenthome", (req, res)=>{
   if(req.isAuthenticated()){
 
     JoinClass.find({studentid:req.user.id}).then(function(classes){
-      console.log(classes);
+      //console.log(classes);
       res.render("studenthome", {classes:classes})
     })
     // res.render("studenthome");
@@ -222,16 +222,28 @@ app.get("/coursehome", (req,res)=>{
   });
   
   
-})
+});
 
-app.post("/coursehome", (req,res)=>{
+app.post("/studentscoursehome", (req,res)=>{
   // console.log(req.body.classid);
   // let classid = req.body.classid;
   // Class.findById(classid).then(function(classes)
   // {
-    coursehomeid = req.body.classid;
-    res.redirect("/coursehome");
+    studentscoursehomeid = req.body.classid;
+    res.redirect("/studentscoursehome");
  
+});
+
+var studentscoursehomeid;
+app.get("/studentscoursehome", (req,res)=>{
+  
+  //res.render("coursehome", {classname:classname});
+  Class.findById(studentscoursehomeid).then(function(classes)
+  {
+    res.render("studentscoursehome", {classname:classes.classname});
+  });
+  
+  
 });
 
 

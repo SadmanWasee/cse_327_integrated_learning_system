@@ -53,6 +53,10 @@
           color: white;
           text-decoration: none;
         }
+
+        a {
+          text-decoration: none;
+        }
   
         .reverse-block {
           display: flex;
@@ -82,14 +86,15 @@
         .card {
           width: 300px;
           margin: 10px;
+          padding: 0;
           box-sizing: border-box;
           box-shadow: 1px 2px 4px black;
-          background-color: white;
+          background: none;
+          border: none;
         }
   
         .card-body {
           height: 200px;
-          padding: 5px;
           background-color: rgb(64, 114, 164);
           display: flex;
           flex-direction: column;
@@ -119,8 +124,8 @@
           <div class="logo">Integrated Learning System</div>
           <ul class="navigation">
             <li class="reverse-block">
-              <a href="/createclass" role="button"><input type="submit" value="+"></a>
-              <a href="/logout" role="button" id="logout">Logout</a>
+              <a href="/createclass" role="button" method="POST"><input type="submit" value="+"></a>
+              <a href="/logout" role="button" id="logout" method="POST">Logout</a>
               
             </li>
           </ul>
@@ -128,14 +133,21 @@
     </div>
 
     <div class="card-container">
+      
         <% for(let i=0; i<classes.length; i++){ %>
-        <div class="card">
-            <div class="card-body">
-                <div class="card-title"><%= classes[i].classname %></div>
-                <div class="card-des"><%= classes[i].subject %></div>
-            </div>
-        </div>
+        <form action="/studentscoursehome" method="POST">
+          <input name="classid" type="hidden" value="<%= classes[i].classid %>">
+          <button class="card" type="submit">
+            <div role="button">
+                <div type="submit" class="card-body">
+                      <div class="card-title"><%= classes[i].classname %></div>
+                      <div class="card-des"><%= classes[i].subject %></div>
+                </div>
+          </div>
+        </button>
+        </form>
         <% } %>
+      
     </div>
 </body>
 </html>

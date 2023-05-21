@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Course Name</title>
+  <style>
+    /* CSS for navigation bar */
+    nav {
+      background-color: #333;
+      color: #fff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px;
+    }
+
+    .logo {
+      font-size: 20px;
+    }
+
+    .navigation {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+    }
+
+    .navigation li {
+      margin-left: 10px;
+    }
+
+    .navigation li a {
+      color: #fff;
+      text-decoration: none;
+    }
+
+    /* CSS for sidebar */
+    .container {
+      display: flex;
+    }
+
+    .sidebar {
+      background-color: #f2f2f2;
+      width: 200px;
+      padding: 20px;
+    }
+
+    .sidebar-button {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: none;
+      background-color: #333;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    .sidebar-button:hover {
+      background-color: #555;
+    }
+
+    /* Additional styles */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    main {
+      margin: 20px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav>
+      <div class="logo"><%=classname%></div>
+      <ul class="navigation">
+        <li><a href="/studenthome">Classes</a></li>
+        <li><a href="/logout">Logout</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <div class="container">
+    <aside class="sidebar">
+      <button class="sidebar-button">Assignments</button>
+      <button class="sidebar-button">Contents</button>
+      <button class="sidebar-button">People</button>
+    </aside>
+
+    <main>
+      <!-- Add the rest of your content here -->
+    </main>
+  </div>
+</body>
+</html>
