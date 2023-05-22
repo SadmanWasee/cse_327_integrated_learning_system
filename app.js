@@ -82,7 +82,7 @@ passport.serializeUser(function(user, cb) {
     callbackURL: "http://localhost:3000/auth/google/home"
   },
   function(accessToken, refreshToken, profile, cb) {
-    User.findOrCreate({ googleId: profile.id }, function (err, user) {
+    User.findOrCreate({ googleId: profile.id, username: profile.displayName }, function (err, user) {
       return cb(err, user);
     });
     
@@ -222,6 +222,16 @@ app.get("/coursehome", (req,res)=>{
   });
   
   
+});
+
+app.post("/coursehome", (req,res)=>{
+  // console.log(req.body.classid);
+  // let classid = req.body.classid;
+  // Class.findById(classid).then(function(classes)
+  // {
+    coursehomeid = req.body.classid;
+    res.redirect("/coursehome");
+ 
 });
 
 app.post("/studentscoursehome", (req,res)=>{

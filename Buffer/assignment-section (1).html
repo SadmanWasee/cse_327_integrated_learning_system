@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Google Classroom Assignment Section Clone</title>
+    <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-200 font-sans">
+    <div class="container mx-auto px-4 py-8">
+        <div class="bg-white rounded-lg shadow-md p-8">
+            <h1 class="text-2xl font-medium text-gray-800 mb-8">Assignments</h1>
+            <div class=" ">
+                   <div class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-2">
+                    <div class="bg-gray-100  rounded-lg shadow-sm">
+                        <div class="px-6 py-4">
+                            <h2 class="text-lg font-medium text-gray-800 mb-4">Math Homework</h2>
+                            <p class="text-sm text-gray-600 mb-4">Topic: Algebra</p>
+                            <p class="text-sm text-gray-600 mb-4">Deadline: May 15, 2023</p>
+                            <div class="flex justify-end">
+                                <button class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg">View</button>
+                            </div>
+                        </div>
+                        <div class="border-t border-gray-300 px-6 py-4">
+                            <h3 class="text-lg font-medium text-gray-800 mb-4">Upload your work</h3>
+                            <form>
+                                <div class="mb-4">
+                                    <label class="block text-gray-700 font-bold mb-2" for="work">Your work</label>
+                                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="work" type="file" placeholder="Upload your work">
+                                </div>
+                                <div class="mb-4">
+                                    <label class="block text-gray-700 font-bold mb-2" for="notes">Notes</label>
+                                    <textarea class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="notes" placeholder="Add any additional notes here"></textarea>
+                                </div>
+                                <button class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg">Submit</button>
+                            </form>
+                        </div>
+                   </div>
+                    <div class="border-t  bg-gray-100 rounded-lg shadow-sm border-gray-300 px-6 py-4">
+                        <p class="text-lg text-dark-600">Your marks: 80/100</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
