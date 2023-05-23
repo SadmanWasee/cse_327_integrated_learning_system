@@ -50,6 +50,7 @@ const classSchema = new mongoose.Schema({
 });
 
 const joinclassSchema = new mongoose.Schema({
+  _id:String,
   studentid: String,
   classid: Number,
   teacher:String,
@@ -202,28 +203,38 @@ app.get("/joinclass",(req,res)=>{
 
 app.post("/joinclass",(req,res)=>{
 
-  Class.findById(req.body.code).then(function(classes){
+  var jccode = req.body.code; 
+
+  var jcid = jccode+req.user.id; 
+
+  Class.findById(jccode).then(function(classes){
 
     const newjoinclasinfo = new JoinClass({
+      _id:jcid,
       studentid: req.user.id,
       classid: req.body.code,
       teacher:classes.teacher,
       classname:classes.classname,
       subject:classes.subject
     })
-    newjoinclasinfo.save();
+    
+    newjoinclasinfo.save().then((res)=>{
+      res.redirect("studenthome");
+    }).catch((err)=>{
+      res.redirect("studenthome");
+    });
+
+
+  }).catch((err)=>{
     res.redirect("studenthome");
-
-
   })
   
 
-})
+});
 
 var coursehomeid;
 app.get("/coursehome", (req,res)=>{
   
-  //res.render("coursehome", {classname:classname});
   Class.findById(coursehomeid).then(function(classes)
   {
     res.render("coursehome", {classname:classes.classname, code: classes.id});
@@ -251,7 +262,7 @@ app.get("/studentscoursehome", (req,res)=>{
   //res.render("coursehome", {classname:classname});
   Class.findById(studentscoursehomeid).then(function(classes)
   {
-    res.render("studentscoursehome", {classname:classes.classname, code:classes._id});
+    res.render("studentscoursehome", {classname:classes.classname});
   });
   
   
