@@ -44,7 +44,8 @@ const userSchema = new mongoose.Schema({
 
 const classSchema = new mongoose.Schema({
     _id:String,
-    teacher:String,
+    teacherid:String,
+    teachername:String,
     classname:String,
     subject:String
 });
@@ -52,6 +53,7 @@ const classSchema = new mongoose.Schema({
 const joinclassSchema = new mongoose.Schema({
   _id:String,
   studentid: String,
+  studentname:String,
   classid: Number,
   teacher:String,
   classname:String,
@@ -135,7 +137,7 @@ app.get("/studenthome", (req, res)=>{
 app.get("/teacherhome", (req, res)=>{
 
   if(req.isAuthenticated()){
-    Class.find({teacher:req.user.id}).then(function(classes){
+    Class.find({teacherid:req.user.id}).then(function(classes){
       res.render("teacherhome", { classes: classes});
     })
   } 
@@ -167,28 +169,36 @@ app.get("/createclass",(req,res)=>{
 
 app.post("/createclass",(req,res)=>{
 
-  let id = "";
-  for(let i=0;i<7;i++)
-  {
-    let char = Math.floor((Math.random() * 10));
-    char.toString;
-    id = id+char;
-
-  }
   
   
-  const newClass = new Class({
+  User.findById(req.user.id).then((founduser)=>{
 
-    _id:id,
-    teacher:req.user.id,
-    classname:req.body.classname,
-    subject:req.body.subject
+    let id = "";
+    for(let i=0;i<7;i++)
+    {
+      let char = Math.floor((Math.random() * 10));
+      char.toString;
+      id = id+char;
+
+    }
+
+    const newClass = new Class({
+
+      _id:id,
+      teacherid:req.user.id,
+      teachername:founduser.username,
+      classname:req.body.classname,
+      subject:req.body.subject
+  
+    });
+  
+    newClass.save();
+  
+    res.redirect("teacherhome");
 
   });
-
-  newClass.save();
-
-  res.redirect("teacherhome");
+  
+  
 })
 
 app.get("/joinclass",(req,res)=>{
@@ -207,27 +217,34 @@ app.post("/joinclass",(req,res)=>{
 
   var jcid = jccode+req.user.id; 
 
-  Class.findById(jccode).then(function(classes){
+  User.findById(req.user.id).then(function(founduser){
 
-    const newjoinclasinfo = new JoinClass({
-      _id:jcid,
-      studentid: req.user.id,
-      classid: req.body.code,
-      teacher:classes.teacher,
-      classname:classes.classname,
-      subject:classes.subject
-    })
-    
-    newjoinclasinfo.save().then((res)=>{
-      res.redirect("studenthome");
+    Class.findById(jccode).then(function(classes){
+
+      const newjoinclasinfo = new JoinClass({
+        _id:jcid,
+        studentid: req.user.id,
+        studentname: founduser.username,
+        classid: req.body.code,
+        teacher:classes.teacher,
+        classname:classes.classname,
+        subject:classes.subject
+      })
+      
+      newjoinclasinfo.save().then((res)=>{
+        res.redirect("studenthome");
+      }).catch((err)=>{
+        res.redirect("studenthome");
+      });
+  
+  
     }).catch((err)=>{
       res.redirect("studenthome");
-    });
+    })
 
+  });
 
-  }).catch((err)=>{
-    res.redirect("studenthome");
-  })
+  
   
 
 });
@@ -268,6 +285,23 @@ app.get("/studentscoursehome", (req,res)=>{
   
 });
 
+var joinclassarr = [];
+
+app.get("/listofpeople", (req,res)=>{
+  Class.findById(coursehomeid).then(function(classes)
+  {
+    JoinClass.find({classid:coursehomeid}).then(function(joinclasses){
+
+      res.render("listofpeople", {classes:classes , joinclasses:joinclasses});
+
+    });
+  });
+})
+
+app.post("/listofpeople",(req,res)=>{
+  res.redirect("listofpeople");
+})
+
 
 app.get('/auth/google',
   passport.authenticate('google', { scope: ['profile', 'email'] }));
@@ -280,40 +314,6 @@ app.get('/auth/google/home',
   });
 
   
-// app.post("/register", (req,res)=>{
-
-//     User.register({username: req.body.username}, req.body.password, function(err, user){
-//         if(err){
-//             console.log(err);
-//             res.redirect("/register");
-//         }else{
-//             passport.authenticate("local")(req,res, function(){
-//                 res.redirect("/home");
-//             })
-//         }
-//     })
-
-
-// });
-
-// app.post("/login", (req,res)=>{
-     
-//     const user = new User({
-//         username: req.body.username,
-//         password: req.body.password
-//     });
-
-//     req.login(user, function(err){
-//         if(err){
-//             console.log(err);
-//         }else{
-//             passport.authenticate("local")(req, res, function(){
-//                 res.redirect("/home"); 
-//             });
-//         }
-//     });
-
-// });
 
 
 app.get('/logout', function(req, res, next){
