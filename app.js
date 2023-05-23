@@ -43,7 +43,7 @@ const userSchema = new mongoose.Schema({
 });
 
 const classSchema = new mongoose.Schema({
-    _id:Number,
+    _id:String,
     teacher:String,
     classname:String,
     subject:String
@@ -166,7 +166,15 @@ app.get("/createclass",(req,res)=>{
 
 app.post("/createclass",(req,res)=>{
 
-  let id = Math.floor((Math.random() * 100000) + 1);
+  let id = "";
+  for(let i=0;i<7;i++)
+  {
+    let char = Math.floor((Math.random() * 10));
+    char.toString;
+    id = id+char;
+
+  }
+  
   
   const newClass = new Class({
 
@@ -218,27 +226,20 @@ app.get("/coursehome", (req,res)=>{
   //res.render("coursehome", {classname:classname});
   Class.findById(coursehomeid).then(function(classes)
   {
-    res.render("coursehome", {classname:classes.classname});
+    res.render("coursehome", {classname:classes.classname, code: classes.id});
   });
   
   
 });
 
 app.post("/coursehome", (req,res)=>{
-  // console.log(req.body.classid);
-  // let classid = req.body.classid;
-  // Class.findById(classid).then(function(classes)
-  // {
     coursehomeid = req.body.classid;
     res.redirect("/coursehome");
  
 });
 
 app.post("/studentscoursehome", (req,res)=>{
-  // console.log(req.body.classid);
-  // let classid = req.body.classid;
-  // Class.findById(classid).then(function(classes)
-  // {
+  
     studentscoursehomeid = req.body.classid;
     res.redirect("/studentscoursehome");
  
@@ -250,7 +251,7 @@ app.get("/studentscoursehome", (req,res)=>{
   //res.render("coursehome", {classname:classname});
   Class.findById(studentscoursehomeid).then(function(classes)
   {
-    res.render("studentscoursehome", {classname:classes.classname});
+    res.render("studentscoursehome", {classname:classes.classname, code:classes._id});
   });
   
   
