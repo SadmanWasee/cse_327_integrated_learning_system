@@ -39,13 +39,15 @@ mongoose.connect('mongodb://127.0.0.1:27017/ims1DB');
 
 const userSchema = new mongoose.Schema({
     username: String,
-    googleId: String
+    googleId: String,
+    email: String
 });
 
 const classSchema = new mongoose.Schema({
     _id:String,
     teacherid:String,
     teachername:String,
+    teacheremail:String,
     classname:String,
     subject:String
 });
@@ -54,6 +56,7 @@ const joinclassSchema = new mongoose.Schema({
   _id:String,
   studentid: String,
   studentname:String,
+  studentemail:String,
   classid: Number,
   teacher:String,
   classname:String,
@@ -85,7 +88,7 @@ passport.serializeUser(function(user, cb) {
     callbackURL: "http://localhost:3000/auth/google/home"
   },
   function(accessToken, refreshToken, profile, cb) {
-    User.findOrCreate({ googleId: profile.id, username: profile.displayName }, function (err, user) {
+    User.findOrCreate({ googleId: profile.id, username: profile.displayName, email:profile.emails[0].value }, function (err, user) {
       return cb(err, user);
     });
     
@@ -123,10 +126,8 @@ app.get("/studenthome", (req, res)=>{
   if(req.isAuthenticated()){
 
     JoinClass.find({studentid:req.user.id}).then(function(classes){
-      //console.log(classes);
       res.render("studenthome", {classes:classes})
-    })
-    // res.render("studenthome");
+    });
   } 
   else{
       res.redirect("/login");
@@ -187,6 +188,7 @@ app.post("/createclass",(req,res)=>{
       _id:id,
       teacherid:req.user.id,
       teachername:founduser.username,
+      teacheremail:founduser.email,
       classname:req.body.classname,
       subject:req.body.subject
   
@@ -225,6 +227,7 @@ app.post("/joinclass",(req,res)=>{
         _id:jcid,
         studentid: req.user.id,
         studentname: founduser.username,
+        studentemail:founduser.email,
         classid: req.body.code,
         teacher:classes.teacher,
         classname:classes.classname,
@@ -276,7 +279,6 @@ app.post("/studentscoursehome", (req,res)=>{
 var studentscoursehomeid;
 app.get("/studentscoursehome", (req,res)=>{
   
-  //res.render("coursehome", {classname:classname});
   Class.findById(studentscoursehomeid).then(function(classes)
   {
     res.render("studentscoursehome", {classname:classes.classname});
@@ -285,7 +287,6 @@ app.get("/studentscoursehome", (req,res)=>{
   
 });
 
-var joinclassarr = [];
 
 app.get("/listofpeople", (req,res)=>{
   Class.findById(coursehomeid).then(function(classes)
