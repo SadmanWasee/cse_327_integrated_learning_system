@@ -84,15 +84,21 @@
 
   <div class="container">
     <aside class="sidebar">
-      <button class="sidebar-button">Home</button>
+      <form action="/coursehome" method="post">
+        <button type="submit" class="sidebar-button">Home</button>
+      </form>
       <button class="sidebar-button">Announcements</button>
       <button class="sidebar-button">Assignments</button>
       <button class="sidebar-button">Contents</button>
-      <button class="sidebar-button">People</button>
+      <form action="/listofpeople" method="post">
+        <button class="sidebar-button">People</button>
+      </form>
+      
+      
     </aside>
 
     <main>
-      <!-- Add the rest of your content here -->
+      <h1>Share your classroom code: <%=code%></h1>
     </main>
   </div>
 </body>

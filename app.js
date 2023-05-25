@@ -39,18 +39,24 @@ mongoose.connect('mongodb://127.0.0.1:27017/ims1DB');
 
 const userSchema = new mongoose.Schema({
     username: String,
-    googleId: String
+    googleId: String,
+    email: String
 });
 
 const classSchema = new mongoose.Schema({
-    _id:Number,
-    teacher:String,
+    _id:String,
+    teacherid:String,
+    teachername:String,
+    teacheremail:String,
     classname:String,
     subject:String
 });
 
 const joinclassSchema = new mongoose.Schema({
+  _id:String,
   studentid: String,
+  studentname:String,
+  studentemail:String,
   classid: Number,
   teacher:String,
   classname:String,
@@ -82,7 +88,7 @@ passport.serializeUser(function(user, cb) {
     callbackURL: "http://localhost:3000/auth/google/home"
   },
   function(accessToken, refreshToken, profile, cb) {
-    User.findOrCreate({ googleId: profile.id, username: profile.displayName }, function (err, user) {
+    User.findOrCreate({ googleId: profile.id, username: profile.displayName, email:profile.emails[0].value }, function (err, user) {
       return cb(err, user);
     });
     
@@ -120,10 +126,8 @@ app.get("/studenthome", (req, res)=>{
   if(req.isAuthenticated()){
 
     JoinClass.find({studentid:req.user.id}).then(function(classes){
-      //console.log(classes);
       res.render("studenthome", {classes:classes})
-    })
-    // res.render("studenthome");
+    });
   } 
   else{
       res.redirect("/login");
@@ -134,7 +138,7 @@ app.get("/studenthome", (req, res)=>{
 app.get("/teacherhome", (req, res)=>{
 
   if(req.isAuthenticated()){
-    Class.find({teacher:req.user.id}).then(function(classes){
+    Class.find({teacherid:req.user.id}).then(function(classes){
       res.render("teacherhome", { classes: classes});
     })
   } 
@@ -166,20 +170,37 @@ app.get("/createclass",(req,res)=>{
 
 app.post("/createclass",(req,res)=>{
 
-  let id = Math.floor((Math.random() * 100000) + 1);
   
-  const newClass = new Class({
+  
+  User.findById(req.user.id).then((founduser)=>{
 
-    _id:id,
-    teacher:req.user.id,
-    classname:req.body.classname,
-    subject:req.body.subject
+    let id = "";
+    for(let i=0;i<7;i++)
+    {
+      let char = Math.floor((Math.random() * 10));
+      char.toString;
+      id = id+char;
+
+    }
+
+    const newClass = new Class({
+
+      _id:id,
+      teacherid:req.user.id,
+      teachername:founduser.username,
+      teacheremail:founduser.email,
+      classname:req.body.classname,
+      subject:req.body.subject
+  
+    });
+  
+    newClass.save();
+  
+    res.redirect("teacherhome");
 
   });
-
-  newClass.save();
-
-  res.redirect("teacherhome");
+  
+  
 })
 
 app.get("/joinclass",(req,res)=>{
@@ -194,51 +215,62 @@ app.get("/joinclass",(req,res)=>{
 
 app.post("/joinclass",(req,res)=>{
 
-  Class.findById(req.body.code).then(function(classes){
+  var jccode = req.body.code; 
 
-    const newjoinclasinfo = new JoinClass({
-      studentid: req.user.id,
-      classid: req.body.code,
-      teacher:classes.teacher,
-      classname:classes.classname,
-      subject:classes.subject
+  var jcid = jccode+req.user.id; 
+
+  User.findById(req.user.id).then(function(founduser){
+
+    Class.findById(jccode).then(function(classes){
+
+      const newjoinclasinfo = new JoinClass({
+        _id:jcid,
+        studentid: req.user.id,
+        studentname: founduser.username,
+        studentemail:founduser.email,
+        classid: req.body.code,
+        teacher:classes.teacher,
+        classname:classes.classname,
+        subject:classes.subject
+      })
+      
+      newjoinclasinfo.save().then((res)=>{
+        res.redirect("studenthome");
+      }).catch((err)=>{
+        res.redirect("studenthome");
+      });
+  
+  
+    }).catch((err)=>{
+      res.redirect("studenthome");
     })
-    newjoinclasinfo.save();
-    res.redirect("studenthome");
 
+  });
 
-  })
+  
   
 
-})
+});
 
 var coursehomeid;
 app.get("/coursehome", (req,res)=>{
   
-  //res.render("coursehome", {classname:classname});
   Class.findById(coursehomeid).then(function(classes)
   {
-    res.render("coursehome", {classname:classes.classname});
+    res.render("coursehome", {classname:classes.classname, code: classes.id});
   });
   
   
 });
 
 app.post("/coursehome", (req,res)=>{
-  // console.log(req.body.classid);
-  // let classid = req.body.classid;
-  // Class.findById(classid).then(function(classes)
-  // {
     coursehomeid = req.body.classid;
     res.redirect("/coursehome");
  
 });
 
 app.post("/studentscoursehome", (req,res)=>{
-  // console.log(req.body.classid);
-  // let classid = req.body.classid;
-  // Class.findById(classid).then(function(classes)
-  // {
+  
     studentscoursehomeid = req.body.classid;
     res.redirect("/studentscoursehome");
  
@@ -247,7 +279,6 @@ app.post("/studentscoursehome", (req,res)=>{
 var studentscoursehomeid;
 app.get("/studentscoursehome", (req,res)=>{
   
-  //res.render("coursehome", {classname:classname});
   Class.findById(studentscoursehomeid).then(function(classes)
   {
     res.render("studentscoursehome", {classname:classes.classname});
@@ -255,6 +286,22 @@ app.get("/studentscoursehome", (req,res)=>{
   
   
 });
+
+
+app.get("/listofpeople", (req,res)=>{
+  Class.findById(coursehomeid).then(function(classes)
+  {
+    JoinClass.find({classid:coursehomeid}).then(function(joinclasses){
+
+      res.render("listofpeople", {classes:classes , joinclasses:joinclasses});
+
+    });
+  });
+})
+
+app.post("/listofpeople",(req,res)=>{
+  res.redirect("listofpeople");
+})
 
 
 app.get('/auth/google',
@@ -268,40 +315,6 @@ app.get('/auth/google/home',
   });
 
   
-// app.post("/register", (req,res)=>{
-
-//     User.register({username: req.body.username}, req.body.password, function(err, user){
-//         if(err){
-//             console.log(err);
-//             res.redirect("/register");
-//         }else{
-//             passport.authenticate("local")(req,res, function(){
-//                 res.redirect("/home");
-//             })
-//         }
-//     })
-
-
-// });
-
-// app.post("/login", (req,res)=>{
-     
-//     const user = new User({
-//         username: req.body.username,
-//         password: req.body.password
-//     });
-
-//     req.login(user, function(err){
-//         if(err){
-//             console.log(err);
-//         }else{
-//             passport.authenticate("local")(req, res, function(){
-//                 res.redirect("/home"); 
-//             });
-//         }
-//     });
-
-// });
 
 
 app.get('/logout', function(req, res, next){
