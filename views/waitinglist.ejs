@@ -6,7 +6,30 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.7/dist/tailwind.min.css" rel="stylesheet">
   <title>People Page</title>
+
+  <style>
+    .btn1{
+        margin-left: 250px;
+        padding: 4px;
+        background-color: blue;
+        color: white;
+        border: 2px solid blue;
+        border-radius: 12px;
+        box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+    }
+    .btn2{
+        margin-left: 10px;
+        padding: 4px;
+        background-color: red;
+        color: white;
+        border: 2px solid red;
+        border-radius: 12px;
+        box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+    }
+  </style>
 </head>
+
+
 
 <body class="bg-gray-100">
 
@@ -26,31 +49,10 @@
 
   <!-- People Section -->
   <div class="max-w-3xl mx-auto py-10 px-4 sm:px-6 lg:px-8">
-    <h2 class="text-2xl font-bold text-gray-700 mb-6">Teacher</h2>
-    <hr class="my-4 border-gray-300">
-
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-1 gap-6">
-      <div class="bg-white rounded-lg shadow-md p-4 flex items-center space-x-4">
-        <div class="w-12 h-12 rounded-full overflow-hidden">
-          <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cGVyc29ufGVufDB8fDB8fHww&w=1000&q=80" alt="Teacher" class="w-full h-full object-cover">
-        </div>
-        <div>
-          <p class="text-gray-700 font-medium"><%= classes.teachername%></p>
-          <div class="flex items-center mt-1">
-            <a href="mailto:john.doe@example.com" class="text-blue-500 hover:text-blue-700"><%= classes.teacheremail%></a>
-            <svg class="w-4 h-4 text-gray-400 ml-1 cursor-pointer" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path>
-            </svg>
-          </div>
-        </div>
-      </div>
-      <!-- Add more teachers here -->
-    </div>
-
     <div class="flex justify-between">
-        <h2 class="text-2xl font-bold text-gray-700 mt-8 basis-1/2">Classmates</h2>
+        <h2 class="text-2xl font-bold text-gray-700 mt-8 basis-1/2">List of people waiting for approval:</h2>
         <div class="text-gray-600 mt-9 basis-1/2 ">
-            <p>Total Classmates : <%= joinclasses.length%></p>
+            <p>Total : <%= joinclasses.length%></p>
         </div>
         <!-- <p class="text-gray-600 mb-4">Total Classmates: 10</p> -->
     </div>
@@ -69,6 +71,16 @@
             <svg class="w-4 h-4 text-gray-400 ml-1 cursor-pointer" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path>
             </svg>
+            <form action="/waitinglist" method="post">
+                <input type="hidden" name="waitinglistop" value="1">
+                <input type="hidden" name="waitinglistcode" value="<%=joinclasses[i].id%>">
+                <button class="btn1"type="submit">Approve</button>
+            </form>
+            <form action="/waitinglist" method="post">
+                <input type="hidden" name="waitinglistop" value="0">
+                <input type="hidden" name="waitinglistcode" value="<%=joinclasses[i].id%>">
+                <button class="btn2"type="submit">Reject</button>
+            </form>
           </div>
         </div>
       </div>
