@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.7/dist/tailwind.min.css" rel="stylesheet">
+  <title>Announcement List</title>
+</head>
+
+<body class="bg-gray-100">
+
+  <!-- Navigation Bar -->
+  <nav class="bg-white shadow-lg">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <div class="flex-shrink-0">
+          <span class="text-xl font-bold text-gray-700">Course Name</span>
+        </div>
+        <div>
+          <button class="bg-blue-600 text-white px-4 py-2 rounded-md flex items-center">
+            <svg class="w-4 h-4 mr-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+            </svg>
+            Create Announcement
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Announcement List -->
+  <div class="max-w-3xl mx-auto py-10 px-4 sm:px-6 lg:px-8">
+    <h2 class="text-2xl font-bold text-gray-700">Announcements</h2>
+    <hr class="my-4 border-gray-300">
+
+    <div class="bg-white rounded-lg shadow-md p-4">
+      <div class="flex items-center space-x-4">
+        <div class="w-12 h-12 rounded-full overflow-hidden">
+          <img src="teacher1.jpg" alt="Teacher" class="w-full h-full object-cover">
+        </div>
+        <div>
+          <p class="text-gray-700 font-medium">John Doe</p>
+          <p class="text-gray-500">May 1, 2023</p>
+        </div>
+      </div>
+      <h3 class="text-xl font-bold text-gray-800 mt-4">Important Announcement</h3>
+      <p class="text-gray-700 mt-2">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer accumsan hendrerit commodo. Curabitur congue massa quis dui hendrerit, sed tincidunt odio dignissim.</p>
+      <div class="mt-4">
+        <a href="#" class="text-blue-500 hover:text-blue-700">Read More</a>
+      </div>
+    </div>
+
+    <!-- Add more announcements here -->
+  </div>
+
+</body>
+
+</html>
