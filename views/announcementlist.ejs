@@ -20,15 +20,17 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex items-center justify-between h-16">
         <div class="flex-shrink-0">
-          <span class="text-xl font-bold text-gray-700">Course Name</span>
+          <span class="text-xl font-bold text-gray-700"><%= classinfo.classname %></span>
         </div>
         <div class="btn">
+        <form action="/createannouncement" method="post">
           <button class="bg-blue-600 text-white px-4 py-2 rounded-md flex items-center" >
             <svg class="w-4 h-4 mr-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
             </svg>
             Create Announcement
           </button>
+        </form>
           <button class="bg-blue-600 text-white px-4 py-2 rounded-md flex items-center" style="margin-left: 5px;">
             <!-- <svg class="w-4 h-4 mr-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
@@ -48,15 +50,14 @@
     <div class="bg-white rounded-lg shadow-md p-4">
       <div class="flex items-center space-x-4">
         <div class="w-12 h-12 rounded-full overflow-hidden">
-          <img src="teacher1.jpg" alt="Teacher" class="w-full h-full object-cover">
+          <!-- <img src="teacher1.jpg" alt="Teacher" class="w-full h-full object-cover"> -->
         </div>
         <div>
-          <p class="text-gray-700 font-medium">John Doe</p>
+          <p class="text-gray-700 font-medium"><%= classinfo.teachername %></p>
           <p class="text-gray-500">May 1, 2023</p>
         </div>
       </div>
       <h3 class="text-xl font-bold text-gray-800 mt-4">Important Announcement</h3>
-      <p class="text-gray-700 mt-2">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer accumsan hendrerit commodo. Curabitur congue massa quis dui hendrerit, sed tincidunt odio dignissim.</p>
       <div class="mt-4">
         <a href="#" class="text-blue-500 hover:text-blue-700">Read More</a>
       </div>

@@ -224,7 +224,9 @@ app.get("/joinclass",async(req,res)=>{
   }
 
 });
-var class_exist, is_teacher;
+
+
+var class_exist, is_teacher, is_student, is_pending;
 app.post("/joinclass",async(req,res)=>{
 
   var jccode = req.body.code; 
@@ -273,10 +275,9 @@ app.post("/joinclass",async(req,res)=>{
   }
   
 
-  
-  
-
 });
+
+
 
 var coursehomeid;
 app.get("/coursehome", (req,res)=>{
@@ -315,6 +316,7 @@ app.get("/studentscoursehome", (req,res)=>{
 
 var waitinglistop;
 var code; 
+
 app.get("/waitinglist", (req,res)=>{
 
   if(waitinglistop == 1 || waitinglistop == 0)
@@ -423,6 +425,30 @@ app.post("/studentlistofpeople",(req,res)=>{
 })
 
 
+var classinfo;
+
+app.get("/announcementlist", async(req,res)=>{
+
+  classinfo = await Class.findById(coursehomeid);
+  res.render("announcementlist", {classinfo:classinfo});
+
+});
+
+app.post("/announcementlist", async(req,res)=>{
+  res.redirect("announcementlist");
+});
+
+app.get("/createannouncement", async(req,res)=>{
+  
+  res.render("createannouncement",{classinfo:classinfo});
+})
+
+app.post("/createannouncement", (req,res)=>{
+  
+  res.redirect("createannouncement");
+})
+
+
 
 app.get('/auth/google',
   passport.authenticate('google', { scope: ['profile', 'email'] }));
@@ -430,7 +456,6 @@ app.get('/auth/google',
 app.get('/auth/google/home', 
   passport.authenticate('google', { failureRedirect: '/login' }),
   function(req, res) {
-    // Successful authentication, redirect home.
     res.redirect('/home');
   });
 
