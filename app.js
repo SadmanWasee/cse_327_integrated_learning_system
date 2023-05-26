@@ -63,12 +63,24 @@ const joinclassSchema = new mongoose.Schema({
   subject:String
 })
 
+const waitinglistSchema = new mongoose.Schema({
+  _id:String,
+  studentid: String,
+  studentname:String,
+  studentemail:String,
+  classid: Number,
+  teacher:String,
+  classname:String,
+  subject:String
+})
+
 userSchema.plugin(passportLocalMongoose);
 userSchema.plugin(findOrCreate);
 
 const User = new mongoose.model("User", userSchema);
 const Class = new mongoose.model("Class", classSchema);
 const JoinClass = new mongoose.model("JoinClass", joinclassSchema);
+const WaitingList = new mongoose.model("WaitingList", waitinglistSchema);
 
 passport.serializeUser(function(user, cb) {
     process.nextTick(function() {
@@ -203,7 +215,7 @@ app.post("/createclass",(req,res)=>{
   
 })
 
-app.get("/joinclass",(req,res)=>{
+app.get("/joinclass",async(req,res)=>{
   if(req.isAuthenticated()){
     res.render("joinclass");
   } 
@@ -213,44 +225,59 @@ app.get("/joinclass",(req,res)=>{
 
 });
 
-app.post("/joinclass",(req,res)=>{
+
+var class_exist, is_teacher, is_student, is_pending;
+app.post("/joinclass",async(req,res)=>{
 
   var jccode = req.body.code; 
 
   var jcid = jccode+req.user.id; 
 
-  User.findById(req.user.id).then(function(founduser){
+  class_exist = await Class.findById(jccode);
 
-    Class.findById(jccode).then(function(classes){
+  is_teacher = await Class.findOne({_id:jccode, teacherid:req.user.id});
 
-      const newjoinclasinfo = new JoinClass({
-        _id:jcid,
-        studentid: req.user.id,
-        studentname: founduser.username,
-        studentemail:founduser.email,
-        classid: req.body.code,
-        teacher:classes.teacher,
-        classname:classes.classname,
-        subject:classes.subject
-      })
-      
-      newjoinclasinfo.save().then((res)=>{
-        res.redirect("studenthome");
+  is_student = await JoinClass.findOne({_id:jcid, studentid:req.user.id});
+
+  is_pending = await WaitingList.findOne({_id:jccode, studentid:req.user.id});
+
+  if(class_exist!=null && is_teacher == null && is_student == null && is_pending == null){
+    User.findById(req.user.id).then(function(founduser){
+
+      Class.findById(jccode).then(function(classes){
+  
+        const newrequestinfo = new WaitingList({
+          _id:jcid,
+          studentid: req.user.id,
+          studentname: founduser.username,
+          studentemail:founduser.email,
+          classid: req.body.code,
+          teacher:classes.teacher,
+          classname:classes.classname,
+          subject:classes.subject
+        })
+        
+        newrequestinfo.save().then((res)=>{
+          res.redirect("studenthome");
+        }).catch((err)=>{
+          res.redirect("studenthome");
+        });
+    
+    
       }).catch((err)=>{
         res.redirect("studenthome");
-      });
+      })
   
-  
-    }).catch((err)=>{
-      res.redirect("studenthome");
-    })
-
-  });
-
-  
+    });
+  }
+  else{
+    res.redirect("studenthome");
+  }
   
 
 });
+
+
 
 var coursehomeid;
 app.get("/coursehome", (req,res)=>{
@@ -287,6 +314,85 @@ app.get("/studentscoursehome", (req,res)=>{
   
 });
 
+var waitinglistop;
+var code; 
+
+app.get("/waitinglist", (req,res)=>{
+
+  if(waitinglistop == 1 || waitinglistop == 0)
+  {
+    if(waitinglistop==1)
+    {
+      WaitingList.findById(code).then((foundreq)=>{
+
+        const newjoininfo = new JoinClass({
+          _id:foundreq.id,
+          studentid: foundreq.studentid,
+          studentname:foundreq.studentname,
+          studentemail:foundreq.studentemail,
+          classid: foundreq.classid,
+          teacher:foundreq.teacher,
+          classname:foundreq.classname,
+          subject:foundreq.subject
+
+          
+        })
+
+        newjoininfo.save();
+      })
+
+      WaitingList.deleteOne({_id:code}).then(function(){
+
+        Class.findById(coursehomeid).then(function(classes)
+        {
+          WaitingList.find({classid:coursehomeid}).then(function(joinclasses){
+
+            res.render("waitinglist", {classes:classes , joinclasses:joinclasses});
+
+          });
+        });
+
+      });
+
+    }
+    else
+    {
+      WaitingList.deleteOne({_id:code}).then(function(){
+
+        Class.findById(coursehomeid).then(function(classes)
+        {
+          WaitingList.find({classid:coursehomeid}).then(function(joinclasses){
+
+            res.render("waitinglist", {classes:classes , joinclasses:joinclasses});
+
+          });
+        });
+
+      });
+    }
+    
+  }
+  else{
+
+    Class.findById(coursehomeid).then(function(classes)
+    {
+      WaitingList.find({classid:coursehomeid}).then(function(joinclasses){
+
+        res.render("waitinglist", {classes:classes , joinclasses:joinclasses});
+
+      });
+    });
+
+  }
+  
+})
+
+app.post("/waitinglist",(req,res)=>{
+  code = req.body.waitinglistcode;
+  waitinglistop = req.body.waitinglistop;
+  res.redirect("waitinglist");
+})
+
 
 app.get("/listofpeople", (req,res)=>{
   Class.findById(coursehomeid).then(function(classes)
@@ -303,6 +409,46 @@ app.post("/listofpeople",(req,res)=>{
   res.redirect("listofpeople");
 })
 
+app.get("/studentlistofpeople", (req,res)=>{
+  Class.findById(studentscoursehomeid).then(function(classes)
+  {
+    JoinClass.find({classid:studentscoursehomeid}).then(function(joinclasses){
+
+      res.render("studentlistofpeople", {classes:classes , joinclasses:joinclasses});
+
+    });
+  });
+})
+
+app.post("/studentlistofpeople",(req,res)=>{
+  res.redirect("studentlistofpeople");
+})
+
+
+var classinfo;
+
+app.get("/announcementlist", async(req,res)=>{
+
+  classinfo = await Class.findById(coursehomeid);
+  res.render("announcementlist", {classinfo:classinfo});
+
+});
+
+app.post("/announcementlist", async(req,res)=>{
+  res.redirect("announcementlist");
+});
+
+app.get("/createannouncement", async(req,res)=>{
+  
+  res.render("createannouncement",{classinfo:classinfo});
+})
+
+app.post("/createannouncement", (req,res)=>{
+  
+  res.redirect("createannouncement");
+})
+
+
 
 app.get('/auth/google',
   passport.authenticate('google', { scope: ['profile', 'email'] }));
@@ -310,7 +456,6 @@ app.get('/auth/google',
 app.get('/auth/google/home', 
   passport.authenticate('google', { failureRedirect: '/login' }),
   function(req, res) {
-    // Successful authentication, redirect home.
     res.redirect('/home');
   });
 
