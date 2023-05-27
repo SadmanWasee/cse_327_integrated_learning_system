@@ -72,6 +72,13 @@ const waitinglistSchema = new mongoose.Schema({
   teacher:String,
   classname:String,
   subject:String
+});
+
+const announcemntShcema = new mongoose.Schema({
+  classid:String,
+  teacherid:String,
+  title: String,
+  details: String
 })
 
 userSchema.plugin(passportLocalMongoose);
@@ -81,6 +88,7 @@ const User = new mongoose.model("User", userSchema);
 const Class = new mongoose.model("Class", classSchema);
 const JoinClass = new mongoose.model("JoinClass", joinclassSchema);
 const WaitingList = new mongoose.model("WaitingList", waitinglistSchema);
+const Announcement = new mongoose.model("Announcement", announcemntShcema);
 
 passport.serializeUser(function(user, cb) {
     process.nextTick(function() {
@@ -426,11 +434,24 @@ app.post("/studentlistofpeople",(req,res)=>{
 
 
 var classinfo;
+//var buffer,announcementlist = [];
 
-app.get("/announcementlist", async(req,res)=>{
+app.get("/announcementlist", (req,res)=>{
 
-  classinfo = await Class.findById(coursehomeid);
-  res.render("announcementlist", {classinfo:classinfo});
+  if(req.isAuthenticated()){
+    Class.findById(coursehomeid).then(function(classinfo){
+
+      Announcement.find({classid:coursehomeid, teacherid:req.user.id}).then(function(announcements){
+        res.render("announcementlist", { classinfo:classinfo, announcements: announcements});
+      });
+
+    })
+    
+  } 
+  else{
+      res.redirect("/login");
+  }
+
 
 });
 
@@ -438,15 +459,33 @@ app.post("/announcementlist", async(req,res)=>{
   res.redirect("announcementlist");
 });
 
+
 app.get("/createannouncement", async(req,res)=>{
-  
-  res.render("createannouncement",{classinfo:classinfo});
-})
+
+  Class.findById(coursehomeid).then(function(classinfo){
+
+    res.render("createannouncement", {classinfo:classinfo});
+
+  })
+});
+
+
 
 app.post("/createannouncement", (req,res)=>{
+
+  const newannouncement = new Announcement({
+
+    classid:coursehomeid,
+    teacherid:req.user.id,
+    title: req.body.title,
+    details: req.body.description
+
+  })
+
+  newannouncement.save();
   
-  res.redirect("createannouncement");
-})
+  res.redirect("announcementlist");
+});
 
 
 
