@@ -599,6 +599,28 @@ app.post("/assignmentslist", async(req,res)=>{
 });
 
 
+app.get("/studentassignmentslist", (req,res)=>{
+
+  if(req.isAuthenticated()){
+    JoinClass.find({classid:studentscoursehomeid}).then(function(classinfo){
+
+      Assignment.find({classid:studentscoursehomeid}).then(function(assignments){
+        res.render("studentassignmentslist", { classinfo:classinfo, assignments: assignments});
+      });
+    })
+  } 
+  else{
+      res.redirect("/login");
+  }
+
+
+});
+
+app.post("/studentassignmentslist", async(req,res)=>{
+  res.redirect("studentassignmentslist");
+});
+
+
 app.get("/createassignment", async(req,res)=>{
 
   Class.findById(coursehomeid).then(function(classinfo){
