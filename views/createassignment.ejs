@@ -15,7 +15,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex items-center justify-between h-16">
         <div class="flex-shrink-0">
-          <span class="text-xl font-bold text-gray-700">CSE327</span>
+          <span class="text-xl font-bold text-gray-700"><%=classinfo.classname %></span>
         </div>
         <div>
           <button class="bg-blue-600 text-white px-4 py-2 rounded-md flex items-center">
@@ -32,7 +32,7 @@
   <!-- Assignment Form -->
   <div class="max-w-3xl mx-auto py-10 px-4 sm:px-6 lg:px-8">
     <h2 class="text-2xl font-bold text-gray-700">Create Assignment</h2>
-    <form class="mt-6" enctype="multipart/form-data">
+    <form action="/createassignment" method="post" class="mt-6" enctype="multipart/form-data">
       <div class="mb-4">
         <label for="title" class="block text-gray-700 font-medium">Title</label>
         <input type="text" id="title" name="title" class="mt-1 px-4 py-2 rounded-md w-full border-gray-300 focus:ring-blue-500 focus:border-blue-500">
@@ -50,8 +50,7 @@
             </svg>
             Choose File
           </label>
-          <input id="file-upload" name="file-upload" type="file" class="hidden">
-          <span class="ml-2 text-gray-500">No file chosen</span>
+          <input id="file-upload" name="file-upload" type="file" class="hidden" enctype="multipart/form-data">
         </div>
       </div>
       <div class="mb-4">

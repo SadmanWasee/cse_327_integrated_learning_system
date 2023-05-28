@@ -9,8 +9,34 @@ const LocalStrategy = require('passport-local').Strategy;
 const passportLocalMongoose = require("passport-local-mongoose");
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const findOrCreate = require('mongoose-findorcreate');
+const multer  = require('multer');
+
+const UPLOADS_FOLDER = "./uploads/";
 
 
+
+//const upload = multer({ storage: storage })
+
+// var upload = multer({
+//   dest:UPLOADS_FOLDER,
+//   limits:{
+//     fileSize: 524288000,
+//   },
+//   fileFilter:(req, file, cb)=>{
+
+//     if(
+//       file.mimetype == "application/pdf"||
+//       file.mimetype == "video/x-matroska"||
+//       file.mimetype == "application/vnd.openxmlformats-officedocument.wordprocessingml.document"||
+//       file.mimetype == "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+//     ){
+//       cb(null,true);
+//     }else{
+//       cb(new Error("Only pdf, docx and mkv file allowed"));
+//     }
+
+//   },
+// });
 
 const app = express();
 
@@ -30,11 +56,37 @@ app.use(session({
 }));
 
 
+
+
 app.use(passport.initialize());
 app.use(passport.session());
 
 
 mongoose.connect('mongodb://127.0.0.1:27017/ims1DB');
+
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, UPLOADS_FOLDER);
+  },
+  filename: function (req, file, cb) {
+    const uniqueSuffix = file.originalname;
+    cb(null, uniqueSuffix)
+  }
+})
+
+const upload = multer({ storage: storage })
+
+app.use((err,req,res,next)=>{
+  if(err){
+    if(err instanceof multer.MulterError){
+      res.status(500).send("There was an upload error!");
+    }
+  }else{
+    res.status(500).send(err.message);
+  }
+})
+
 
 
 const userSchema = new mongoose.Schema({
@@ -75,10 +127,12 @@ const waitinglistSchema = new mongoose.Schema({
 });
 
 const announcemntShcema = new mongoose.Schema({
+
   classid:String,
   teacherid:String,
   title: String,
-  details: String
+  details: String,
+  date:String
 })
 
 userSchema.plugin(passportLocalMongoose);
@@ -430,11 +484,8 @@ app.get("/studentlistofpeople", (req,res)=>{
 
 app.post("/studentlistofpeople",(req,res)=>{
   res.redirect("studentlistofpeople");
-})
+});
 
-
-var classinfo;
-//var buffer,announcementlist = [];
 
 app.get("/announcementlist", (req,res)=>{
 
@@ -480,13 +531,60 @@ app.post("/createannouncement", (req,res)=>{
     title: req.body.title,
     details: req.body.description
 
-  })
+  });
 
   newannouncement.save();
   
   res.redirect("announcementlist");
 });
 
+
+app.get("/assignmentslist", (req,res)=>{
+
+  if(req.isAuthenticated()){
+    Class.findById(coursehomeid).then(function(classinfo){
+
+      res.render("assignmentslist", {classinfo:classinfo});
+  
+    });
+    
+  } 
+  else{
+      res.redirect("/login");
+  }
+
+
+});
+
+app.post("/assignmentslist", async(req,res)=>{
+  res.redirect("assignmentslist");
+});
+
+
+app.get("/createassignment", async(req,res)=>{
+
+  Class.findById(coursehomeid).then(function(classinfo){
+
+    res.render("createassignment", {classinfo:classinfo});
+
+  })
+});
+
+
+
+app.post("/createassignment",upload.single("file-upload"),(req,res)=>{
+
+  // const newannouncement = new Announcement({
+
+  //   classid:coursehomeid,
+  //   teacherid:req.user.id,
+  //   title: req.body.title,
+  //   details: req.body.description
+
+  // });
+  res.redirect("assignmentslist");
+
+});
 
 
 app.get('/auth/google',
