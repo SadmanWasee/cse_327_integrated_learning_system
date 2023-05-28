@@ -528,7 +528,7 @@ app.get("/studentannouncementlist", (req,res)=>{
   if(req.isAuthenticated()){
     JoinClass.find({classid:studentscoursehomeid}).then(function(classinfo){
 
-      Announcement.find({classid:studentscoursehomeid, teacherid:classinfo.teacherid}).then(function(announcements){
+      Announcement.find({classid:studentscoursehomeid}).then(function(announcements){
         res.render("studentannouncementlist", { classinfo:classinfo, announcements: announcements});
       });
 
