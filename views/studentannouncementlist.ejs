@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.7/dist/tailwind.min.css" rel="stylesheet">
-  <title>Assignment List</title>
+  <title>Announcement List</title>
 </head>
 <style>
   .btn{
@@ -20,16 +20,10 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex items-center justify-between h-16">
         <div class="flex-shrink-0">
-          <span class="text-xl font-bold text-gray-700"><%=classinfo.classname %></span>
+          <span class="text-xl font-bold text-gray-700"><%= classinfo[0].classname %></span>
         </div>
         <div class="btn">
-          <a href="/createassignment" class="bg-blue-600 text-white px-4 py-2 rounded-md flex items-center" >
-            <svg class="w-4 h-4 mr-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-            </svg>
-            Create Assignment
-        </a>
-          <a href="teacherhome" class="bg-blue-600 text-white px-4 py-2 rounded-md flex items-center" style="margin-left: 5px;">
+          <a href="/studentscoursehome" type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-md flex items-center" style="margin-left: 5px;">
             <!-- <svg class="w-4 h-4 mr-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
             </svg> -->
@@ -42,20 +36,25 @@
 
   <!-- Announcement List -->
   <div class="max-w-3xl mx-auto py-10 px-4 sm:px-6 lg:px-8">
-    <h2 class="text-2xl font-bold text-gray-700">Assignments</h2>
+    <h2 class="text-2xl font-bold text-gray-700">Announcements</h2>
     <hr class="my-4 border-gray-300">
-    <% for(let i=0;i<assignments.length;i++){%>
+    <% for(let i=0; i<announcements.length; i++){%>
     <div class="bg-white rounded-lg shadow-md p-4">
       <div class="flex items-center space-x-4">
-        <!-- <div class="w-12 h-12 rounded-full overflow-hidden">
-          <img src="teacher1.jpg" alt="Teacher" class="w-full h-full object-cover">
-        </div> -->
+        <div class="w-12 h-12 rounded-full overflow-hidden">
+          <!-- <img src="teacher1.jpg" alt="Teacher" class="w-full h-full object-cover"> -->
+        </div>
+        <div>
+          <p class="text-gray-700 font-medium"><%= classinfo.teachername %></p>
+          <p class="text-gray-500">May 1, 2023</p>
+        </div>
       </div>
-      <h3 class="text-xl font-bold text-gray-800 mt-4"><%=assignments[i].title %></h3>
-
+      <h3 class="text-xl font-bold text-gray-800 mt-4"><%=announcements[i].title %></h3>
+      <div class="mt-4">
+        <p><%=announcements[i].details %></p>
+      </div>
     </div>
-    <%} %>
-
+    <%}%>
     <!-- Add more announcements here -->
   </div>
 

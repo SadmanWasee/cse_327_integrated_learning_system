@@ -133,6 +133,17 @@ const announcemntShcema = new mongoose.Schema({
   title: String,
   details: String,
   date:String
+});
+
+
+const assignmentschema = new mongoose.Schema({
+  classid:String,
+  title:String,
+  description:String,
+  file:String,
+  marks:String,
+  deadline:String
+
 })
 
 userSchema.plugin(passportLocalMongoose);
@@ -143,6 +154,7 @@ const Class = new mongoose.model("Class", classSchema);
 const JoinClass = new mongoose.model("JoinClass", joinclassSchema);
 const WaitingList = new mongoose.model("WaitingList", waitinglistSchema);
 const Announcement = new mongoose.model("Announcement", announcemntShcema);
+const Assignment = new mongoose.model("Assignment", assignmentschema);
 
 passport.serializeUser(function(user, cb) {
     process.nextTick(function() {
@@ -511,6 +523,30 @@ app.post("/announcementlist", async(req,res)=>{
 });
 
 
+app.get("/studentannouncementlist", (req,res)=>{
+
+  if(req.isAuthenticated()){
+    JoinClass.find({classid:studentscoursehomeid}).then(function(classinfo){
+
+      Announcement.find({classid:studentscoursehomeid, teacherid:classinfo.teacherid}).then(function(announcements){
+        res.render("studentannouncementlist", { classinfo:classinfo, announcements: announcements});
+      });
+
+    })
+    
+  } 
+  else{
+      res.redirect("/login");
+  }
+
+
+});
+
+app.post("/studentannouncementlist", async(req,res)=>{
+  res.redirect("studentannouncementlist");
+});
+
+
 app.get("/createannouncement", async(req,res)=>{
 
   Class.findById(coursehomeid).then(function(classinfo){
@@ -544,7 +580,9 @@ app.get("/assignmentslist", (req,res)=>{
   if(req.isAuthenticated()){
     Class.findById(coursehomeid).then(function(classinfo){
 
-      res.render("assignmentslist", {classinfo:classinfo});
+      Assignment.find({classid:coursehomeid}).then(function(assignments){
+        res.render("assignmentslist", {classinfo:classinfo, assignments:assignments});
+      })
   
     });
     
@@ -574,15 +612,23 @@ app.get("/createassignment", async(req,res)=>{
 
 app.post("/createassignment",upload.single("file-upload"),(req,res)=>{
 
-  // const newannouncement = new Announcement({
+  const newannouncement = new Assignment({
 
-  //   classid:coursehomeid,
-  //   teacherid:req.user.id,
-  //   title: req.body.title,
-  //   details: req.body.description
+    classid:coursehomeid,
+    title:req.body.title,
+    description:req.body.description,
+    file:req.body.filename,
+    marks:req.body.marks,
+    deadline:req.body.deadline
 
-  // });
-  res.redirect("assignmentslist");
+  });
+
+  newannouncement.save().then(()=>{
+    res.redirect("assignmentslist");
+  }).catch(()=>{
+    res.redirect("assignmentslist");
+  })
+  
 
 });
 
