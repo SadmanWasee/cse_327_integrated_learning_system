@@ -42,11 +42,11 @@
     <div class="bg-white rounded-lg shadow-md p-4">
       <div class="flex items-center space-x-4">
         <div class="w-12 h-12 rounded-full overflow-hidden">
-          <!-- <img src="teacher1.jpg" alt="Teacher" class="w-full h-full object-cover"> -->
+          <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cGVyc29ufGVufDB8fDB8fHww&w=1000&q=80" alt="Teacher" class="w-full h-full object-cover">
         </div>
         <div>
-          <p class="text-gray-700 font-medium"><%= classinfo.teachername %></p>
-          <p class="text-gray-500">May 1, 2023</p>
+          <p class="text-gray-700 font-medium"><%= classinfo[0].teachername %></p>
+           <!-- <p class="text-gray-500">May 1, 2023</p> -->
         </div>
       </div>
       <h3 class="text-xl font-bold text-gray-800 mt-4"><%=announcements[i].title %></h3>

@@ -15,29 +15,6 @@ const UPLOADS_FOLDER = "./uploads/";
 
 
 
-//const upload = multer({ storage: storage })
-
-// var upload = multer({
-//   dest:UPLOADS_FOLDER,
-//   limits:{
-//     fileSize: 524288000,
-//   },
-//   fileFilter:(req, file, cb)=>{
-
-//     if(
-//       file.mimetype == "application/pdf"||
-//       file.mimetype == "video/x-matroska"||
-//       file.mimetype == "application/vnd.openxmlformats-officedocument.wordprocessingml.document"||
-//       file.mimetype == "application/vnd.openxmlformats-officedocument.presentationml.presentation"
-//     ){
-//       cb(null,true);
-//     }else{
-//       cb(new Error("Only pdf, docx and mkv file allowed"));
-//     }
-
-//   },
-// });
-
 const app = express();
 
 
@@ -144,7 +121,26 @@ const assignmentschema = new mongoose.Schema({
   marks:String,
   deadline:String
 
+});
+
+const contentschema = new mongoose.Schema({
+  classid:String,
+  title:String,
+  description:String,
+  file:String
 })
+
+
+let today = new Date();
+    let currentday = today.getDay(); 
+    let options = {
+        weekday : "long",
+        day : "numeric",
+        month: "long",
+        year: "numeric"
+    };
+
+const day = today.toLocaleDateString("en-US", options);
 
 userSchema.plugin(passportLocalMongoose);
 userSchema.plugin(findOrCreate);
@@ -258,9 +254,14 @@ app.post("/createclass",(req,res)=>{
 
   
   
-  User.findById(req.user.id).then((founduser)=>{
+
+  User.findById(req.user.id).then(async(founduser)=>{
 
     let id = "";
+    let found;
+    do{
+
+      
     for(let i=0;i<7;i++)
     {
       let char = Math.floor((Math.random() * 10));
@@ -268,6 +269,14 @@ app.post("/createclass",(req,res)=>{
       id = id+char;
 
     }
+
+    found = await Class.findById(id)
+
+    }while(found != null);
+    
+   
+
+    
 
     const newClass = new Class({
 
@@ -654,6 +663,14 @@ app.post("/createassignment",upload.single("file-upload"),(req,res)=>{
 
 });
 
+
+app.get("/contentlist", (req,res)=>{
+  res.render("contentlist");
+})
+
+app.post("/contentlist", (req,res)=>{
+  res.redirect("contentlist");
+})
 
 app.get('/auth/google',
   passport.authenticate('google', { scope: ['profile', 'email'] }));
