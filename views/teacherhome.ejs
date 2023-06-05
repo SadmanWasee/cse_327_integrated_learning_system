@@ -36,6 +36,11 @@
           font-size: 20px;
           margin-left: 20px;
         }
+
+        .profile{
+          font-size: 20px;
+          margin-left: 35px;
+        }
   
         .navigation {
           list-style-type: none;
@@ -114,6 +119,10 @@
           line-height: 1.5;
           color: white;
         }
+
+        .welcome{
+          margin-left: 640px;
+        }
     </style>
 </head>
 <body>
@@ -122,15 +131,18 @@
         
         <nav>
           <div class="logo">Integrated Learning System</div>
+          <div class="profile">Teacher's Home Page</div>
           <ul class="navigation">
             <li class="reverse-block">
-              <a href="/createclass" role="button" method="POST"><input type="submit" value="+"></a>
-              <a href="/logout" role="button" id="logout" method="POST">Logout</a>
-              
+              <a href="/home" role="button" id="logout" method="POST">Go Back</a>
+              <a href="/createclass" role="button" method="POST">Create Class</a>
+              <a href="/logout" role="button" id="logout" method="POST">Logout</a> 
             </li>
           </ul>
         </nav>
     </div>
+
+    <div class="welcome"><h3>Welcome back <%=user%></h3></div>
 
     <div class="card-container">
       

@@ -208,7 +208,7 @@ app.get("/studenthome", (req, res)=>{
   if(req.isAuthenticated()){
 
     JoinClass.find({studentid:req.user.id}).then(function(classes){
-      res.render("studenthome", {classes:classes})
+      res.render("studenthome", {classes:classes, user:req.user.username})
     });
   } 
   else{
@@ -221,7 +221,7 @@ app.get("/teacherhome", (req, res)=>{
 
   if(req.isAuthenticated()){
     Class.find({teacherid:req.user.id}).then(function(classes){
-      res.render("teacherhome", { classes: classes});
+      res.render("teacherhome", { classes: classes,user:req.user.username});
     })
   } 
   else{
