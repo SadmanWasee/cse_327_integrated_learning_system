@@ -123,6 +123,8 @@ const assignmentschema = new mongoose.Schema({
 
 });
 
+
+
 const contentschema = new mongoose.Schema({
   classid:String,
   title:String,
@@ -151,6 +153,7 @@ const JoinClass = new mongoose.model("JoinClass", joinclassSchema);
 const WaitingList = new mongoose.model("WaitingList", waitinglistSchema);
 const Announcement = new mongoose.model("Announcement", announcemntShcema);
 const Assignment = new mongoose.model("Assignment", assignmentschema);
+const Content = new mongoose.model("Content", contentschema);
 
 passport.serializeUser(function(user, cb) {
     process.nextTick(function() {
@@ -643,7 +646,7 @@ app.get("/createassignment", async(req,res)=>{
 
 app.post("/createassignment",upload.single("file-upload"),(req,res)=>{
 
-  const newannouncement = new Assignment({
+  const newassignment = new Assignment({
 
     classid:coursehomeid,
     title:req.body.title,
@@ -654,7 +657,7 @@ app.post("/createassignment",upload.single("file-upload"),(req,res)=>{
 
   });
 
-  newannouncement.save().then(()=>{
+  newassignment.save().then(()=>{
     res.redirect("assignmentslist");
   }).catch(()=>{
     res.redirect("assignmentslist");
@@ -665,11 +668,47 @@ app.post("/createassignment",upload.single("file-upload"),(req,res)=>{
 
 
 app.get("/contentlist", (req,res)=>{
-  res.render("contentlist");
+  //res.render("contentlist");
+
+  if(req.isAuthenticated()){
+    
+
+      Content.find({classid:coursehomeid}).then(function(contents){
+        res.render("contentlist", { contents: contents});
+      });
+  } 
+  else{
+      res.redirect("/login");
+  }
+  
 })
 
 app.post("/contentlist", (req,res)=>{
   res.redirect("contentlist");
+})
+
+app.get("/contentupload", (req,res)=>{
+  res.render("contentupload")
+})
+
+app.post("/contentupload", upload.single("file-upload"), (req,res)=>{
+  
+  const newcontent = new Content({
+
+    classid:coursehomeid,
+    title:req.body.title,
+    description:req.body.description,
+    file:req.body.filename,
+    
+
+  });
+
+  newcontent.save().then(()=>{
+    res.redirect("contentlist");
+  }).catch(()=>{
+    res.redirect("contentlist");
+  })
+
 })
 
 app.get('/auth/google',

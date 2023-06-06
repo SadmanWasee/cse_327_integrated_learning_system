@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Materials - Google Classroom</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.7/dist/tailwind.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-gray-100">
+    <!-- Navigation Bar -->
+    <nav class="bg-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex-shrink-0">
+                    <img class="h-8 w-8"
+                        src="https://www.gstatic.com/images/branding/product/2x/classroom_48dp.png"
+                        alt="Google Classroom Logo">
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="/coursehome"
+                            class="text-gray-500 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">Home</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Content -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <div class="flex items-center justify-between mb-8">
+            <h1 class="text-3xl font-bold">Upload Materials</h1>
+            <a href="/contentlist" class="text-gray-500 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">Go to Content Lists</a>
+        </div>
+        <div class="bg-white p-6 rounded-lg shadow-md">
+            <form action="/contentupload" method="post" enctype="multipart/form-data">
+                <div class="mb-4">
+                    <label for="title" class="block text-gray-700 font-medium">Title</label>
+                    <input type="text" id="title" name="title"
+                        class="mt-1 px-4 py-2 rounded-md w-full border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
+                        placeholder="Enter the title" name="title">
+                </div>
+                <div class="mb-4">
+                    <label for="description" class="block text-gray-700 font-medium">Description</label>
+                    <textarea id="description" name="description" rows="4"
+                        class="mt-1 px-4 py-2 rounded-md w-full border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
+                        placeholder="Enter the description" name="description"></textarea>
+                </div>
+                <div class="mb-4">
+                    <label for="file-upload"
+                        class="block text-gray-700 font-medium">Upload File</label>
+                    <div class="flex items-center">
+                        <label for="file-upload"
+                            class="flex items-center justify-center bg-white text-blue-600 hover:text-blue-700 px-4 py-2 rounded-md border border-blue-600 hover:border-blue-700">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor" class="h-6 w-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                            </svg>
+                            <span class="ml-2">Choose a file</span>
+                        </label>
+                        <input type="file" id="file-upload" class="sr-only" name="file-upload">
+                        <span id="file-name" class="ml-3"></span>
+                    </div>
+                </div>
+                <!-- <div class="mb-4">
+                    <label for="drive-upload" class="block text-gray-700 font-medium">Drive</label>
+                    <div class="flex items-center">
+                        <a href="https://drive.google.com/" target="_blank"
+                            class="flex items-center justify-center bg-white text-blue-600 hover:text-blue-700 px-4 py-2 rounded-md border border-blue-600 hover:border-blue-700">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor" class="h-6 w-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M10 5l7 7m0 0l-7 7m7-7H3"></path>
+                            </svg>
+                            <span class="ml-2">Insert from Drive</span>
+                        </a>
+                    </div>
+                </div> -->
+                <button type="submit"
+                    class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md">Upload</button>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -20,8 +20,10 @@
                 </div>
                 <div class="hidden md:block">
                     <div class="ml-10 flex items-baseline space-x-4">
-                        <a href="#"
+                        <a href="/coursehome"
                             class="text-gray-500 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">Home</a>
+                        <a href="/contentupload"
+                            class="text-gray-500 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">Upload Content</a>
                     </div>
                 </div>
             </div>
@@ -33,6 +35,8 @@
         <div class="flex items-center justify-between mb-8">
             <h1 class="text-3xl font-bold">Content Lists</h1>
         </div>
+        
+        <%for(let i=0;i<contents.length;i++){%>
         <div class="bg-white p-6 rounded-lg shadow-md">
             <ul class="divide-y divide-gray-200">
                 <li class="py-4">
@@ -42,7 +46,7 @@
                                 alt="User Profile Picture">
                         </div>
                         <div class="ml-4">
-                            <p class="text-lg font-medium text-gray-900">Material Title</p>
+                            <p class="text-lg font-medium text-gray-900">Material Title: <%= contents[i].title%></p>
                             <p class="text-gray-500">Uploaded by John Doe</p>
                         </div>
                         <div class="ml-auto">
@@ -61,6 +65,7 @@
                 
             </ul>
         </div>
+        <%}%>
     </div>
 </body>
 
