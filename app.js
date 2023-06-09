@@ -370,7 +370,7 @@ app.get("/coursehome", (req,res)=>{
   
   Class.findById(coursehomeid).then(function(classes)
   {
-    res.render("coursehome", {classname:classes.classname, code: classes.id});
+    res.render("coursehome", {classname:classes.classname, code: classes.id, teachername:classes.teachername});
   });
   
   
@@ -394,7 +394,7 @@ app.get("/studentscoursehome", (req,res)=>{
   
   Class.findById(studentscoursehomeid).then(function(classes)
   {
-    res.render("studentscoursehome", {classname:classes.classname});
+    res.render("studentscoursehome", {classname:classes.classname, student:req.user.username});
   });
   
   
@@ -644,14 +644,16 @@ app.get("/createassignment", async(req,res)=>{
 
 
 
-app.post("/createassignment",upload.single("file-upload"),(req,res)=>{
+app.post("/createassignment",upload.single("file"),async(req,res)=>{
 
+  let fname = (req.file.filename);
+  console.log(fname);
   const newassignment = new Assignment({
 
     classid:coursehomeid,
     title:req.body.title,
     description:req.body.description,
-    file:req.body.filename,
+    file:fname,
     marks:req.body.marks,
     deadline:req.body.deadline
 
@@ -691,14 +693,28 @@ app.get("/contentupload", (req,res)=>{
   res.render("contentupload")
 })
 
+app.get("/studentcontentlist", (req,res)=>{
+  if(req.isAuthenticated()){
+    Content.find({classid:studentscoursehomeid}).then(function(contents){
+      res.render("studentcontentlist", {contents:contents});
+    });
+
+  }
+  else{
+    res.redirect("/login");
+  }
+})
+app.post("/studentcontentlist", (req,res)=>{
+  res.redirect("studentcontentlist");
+})
+
 app.post("/contentupload", upload.single("file-upload"), (req,res)=>{
   
   const newcontent = new Content({
 
     classid:coursehomeid,
     title:req.body.title,
-    description:req.body.description,
-    file:req.body.filename,
+    description:req.body.description
     
 
   });

@@ -75,6 +75,7 @@
   <header>
     <nav>
       <div class="logo"><%=classname%></div>
+      <div><h3>Student's View</h3></div>
       <ul class="navigation">
         <li><a href="/studenthome">Classes</a></li>
         <li><a href="/logout">Logout</a></li>
@@ -92,14 +93,17 @@
         <button class="sidebar-button">Assignments</button>
       </form>
       
-      <button class="sidebar-button">Contents</button>
+      <form action="/studentcontentlist" method="post">
+        <button class="sidebar-button">Contents</button>
+      </form>
+
       <form action="/studentlistofpeople" method="post">
         <button class="sidebar-button">People</button>
       </form>
     </aside>
 
     <main>
-      <!-- Add the rest of your content here -->
+      <h2>Welcome <%=student%> </h2> 
     </main>
   </div>
 </body>
