@@ -44,12 +44,12 @@
     <td>1.4.5-lts.1</td>
   </tr>
   <tr>
-    <td></td>
-    <td></td>
+    <td>passport-local</td>
+    <td>1.0.0</td>
   </tr>
   <tr>
-    <td></td>
-    <td></td>
+    <td>passport-local-mongoose</td>
+    <td>8.0.0</td>
   </tr>
   <tr>
     <td>passport</td>
