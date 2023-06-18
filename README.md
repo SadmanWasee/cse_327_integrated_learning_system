@@ -1,7 +1,7 @@
 # cse_327_integrated_learning_system
 <html>
 <h1>This repository is for our CSE327 - Software Engineering Project</h1> 
-  <p>This is a web application for all teachers and students. We aim to develop a platform which can be used to do classroom management acitivies from home</p>
+  <p>This is a web application for all teachers and students. We aim to develop a platform which can be used to do classroom management acitivies from home.</p>
 <h2>Required packages</h2>
 <table>
   <tr>
