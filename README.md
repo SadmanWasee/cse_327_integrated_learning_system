@@ -1,6 +1,7 @@
 # cse_327_integrated_learning_system
 <html>
 <h1>This repository is for our CSE327 - Software Engineering Project</h1> 
+  <p>This is a web application for all teachers and students </p>
 <h2>Required packages</h2>
 <table>
   <tr>
